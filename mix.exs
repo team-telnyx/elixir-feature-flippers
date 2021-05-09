@@ -1,16 +1,21 @@
 defmodule FeatureFlippers.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/team-telnyx/elixir-feature-flippers"
+  @version "0.1.2"
+
   def project do
     [
       app: :feature_flippers,
-      version: "0.1.1",
+      version: @version,
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       package: package(),
       source_url: "https://github.com/team-telnyx/elixir-feature-flippers",
-      description: description()
+      description: description(),
+      name: "FeatureFlippers",
+      docs: docs()
     ]
   end
 
@@ -28,7 +33,8 @@ defmodule FeatureFlippers.MixProject do
 
   defp description do
     """
-    Easier management of feature flippers in Elixir.
+    Provides a mechanism to turn features on and off within an Elixir
+    application.
     """
   end
 
@@ -42,5 +48,14 @@ defmodule FeatureFlippers.MixProject do
       links: %{"GitHub" => "https://github.com/team-telnyx/elixir-feature-flippers"},
       files: ~w"lib mix.exs README.md LICENSE"
     ]
+  end
+
+  defp docs do
+  [
+    main: "FeatureFlippers",
+    source_ref: "v#{@version}",
+    canonical: "https://hexdocs.pm/feature_flippers",
+    source_url: @source_url
+  ]
   end
 end

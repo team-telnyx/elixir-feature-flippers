@@ -21,6 +21,10 @@ defmodule FeatureFlippers do
           # original code
       end
 
+  It means that if you remove a feature flipper declaration, your code won't
+  compile and `mix` will also indicate where the missing feature flippers are
+  being used. This may be useful when decommissioning feature flippers.
+
   You can turn them on/off in compile time setting them in your
   `config/config.exs` (or in runtime through `config/runtime.exs`):
 

@@ -1,6 +1,6 @@
 # FeatureFlippers
 
-A helpful and simple way to use feature toggles/flippers/flags on your Elixir code, built around `Application` configurations.
+A helpful and simple way to use feature toggles/flippers/flags on your Elixir code, built around `Application` configurations. It is intended to allow developers to push code to production in a disabled state and carefully control whether or not the code is enabled or disabled without doing additional releases.
 
 ## How to use
 
