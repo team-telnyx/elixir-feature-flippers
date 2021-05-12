@@ -11,8 +11,9 @@ defmodule Flags do
   use FeatureFlippers, otp_app: :my_app
 
   feature_flipper :foo?
-  feature_flipper :bar?, expires: "2000-01-01"
-  feature_flipper :baz?, always_disabled: true
+  feature_flipper :bar?, expires: ~D[2000-01-01]
+  feature_flipper :baz?, disabled: true
+  feature_flipper :foobar?, default: true
 end
 ```
 

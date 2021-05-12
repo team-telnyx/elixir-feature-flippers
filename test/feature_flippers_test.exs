@@ -7,7 +7,9 @@ defmodule FeatureFlippersTest do
 
     feature_flipper :foo?
     feature_flipper :bar?, expires: "2000-01-01"
-    feature_flipper :baz?, always_disabled: true
+    feature_flipper :baz?, disabled: true
+    feature_flipper :foobar?, default: true
+    feature_flipper :qux?, expires: ~D[2100-01-01]
   end
 
   test "put true in application env, Flags.foo? becomes true" do
@@ -36,5 +38,10 @@ defmodule FeatureFlippersTest do
 
   test "only :bar? has expired" do
     assert Flags.expired() == [:bar?]
+    assert :qux? not in Flags.expired()
+  end
+
+  test "default of Flags.foobar? is true" do
+    assert Flags.foobar?() == true
   end
 end
