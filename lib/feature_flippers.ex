@@ -52,7 +52,7 @@ defmodule FeatureFlippers do
   `Application` environment, you can specify the `:callback` option, such as:
 
       defmodule Flags do
-        use FeatureFlippers, callback: &Flags.on?/2
+        use FeatureFlippers, callback: &Flags.on?/1
 
         def on?(flag) do
           # access `flag` or return `nil` if not found.
