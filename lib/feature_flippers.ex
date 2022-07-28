@@ -5,20 +5,20 @@ defmodule FeatureFlippers do
   Declare a module where you'll define the available FFs and just declare them all:
 
       defmodule Flags do
-          use FeatureFlippers, otp_app: :my_app
+        use FeatureFlippers, otp_app: :my_app
 
-          feature_flipper :foo?
-          feature_flipper :bar?, expires: "2000-01-01"
-          feature_flipper :baz?, disabled: true
+        feature_flipper :foo?
+        feature_flipper :bar?, expires: "2000-01-01"
+        feature_flipper :baz?, disabled: true
       end
 
   Each `feature_flipper/2` declaration defines a function returning boolean in
   the containing module. So, in your code, use them as follows:
 
       if Flags.foo? do
-          # new feature
+        # new feature
       else
-          # original code
+        # original code
       end
 
   It means that if you remove a feature flipper declaration, your code won't
@@ -47,6 +47,17 @@ defmodule FeatureFlippers do
 
   At any moment, you can discover which feature flippers have expired calling
   `expired/0`.
+
+  If you want to use a different storage for your flags instead of
+  `Application` environment, you can specify the `:callback` option, such as:
+
+      defmodule Flags do
+        use FeatureFlippers, callback: &Flags.on?/2
+
+        def on?(flag) do
+          # access `flag` or return `nil` if not found.
+        end
+      end
   """
 
   @doc false
@@ -56,6 +67,7 @@ defmodule FeatureFlippers do
 
       @feature_flippers []
       @otp_app unquote(opts)[:otp_app]
+      @callback_fun unquote(opts)[:callback]
 
       @before_compile unquote(__MODULE__)
     end
@@ -86,14 +98,25 @@ defmodule FeatureFlippers do
 
       for {name, {_expires, default, disabled}} <- @feature_flippers do
         quote do
-          if unquote(disabled) do
-            @doc false
-            def unquote(name)(), do: false
-          else
-            @doc false
-            def unquote(name)() do
-              FeatureFlippers.on?(@otp_app, __MODULE__, unquote(name), unquote(default))
-            end
+          cond do
+            unquote(disabled) ->
+              @doc false
+              def unquote(name)(), do: false
+
+            @callback_fun ->
+              @doc false
+              def unquote(name)() do
+                case @callback_fun.(unquote(name)) do
+                  nil -> unquote(default)
+                  value -> value
+                end
+              end
+
+            true ->
+              @doc false
+              def unquote(name)() do
+                FeatureFlippers.on?(@otp_app, __MODULE__, unquote(name), unquote(default))
+              end
           end
         end
       end

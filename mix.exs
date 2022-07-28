@@ -2,7 +2,7 @@ defmodule FeatureFlippers.MixProject do
   use Mix.Project
 
   @source_url "https://github.com/team-telnyx/elixir-feature-flippers"
-  @version "1.0.0"
+  @version "1.0.1"
 
   def project do
     [
